@@ -12,6 +12,49 @@ open(OUT, ">$output") || die "Nao foi possivel abrir o arquivo $output\n";
 %seq = ();
 %qual = ();
 $tamanho = 0;
+
+%phred33 = ("0" => "!",
+            "1" => "\\",
+            "2" => "#",
+            "3" => "\$",
+            "4" => "%",
+            "5" => "&",
+            "6" => "'",
+            "7" => "(",
+            "8" => ")",
+            "9" => "*",
+            "10" => "+",
+            "11" => ",",
+            "12" => "-",
+            "13" => ".",
+            "14" => "/",
+            "15" => "0",
+            "16" => "1",
+            "17" => "2",
+            "18" => "3",
+            "19" => "4",
+            "20" => "5",
+            "21" => "6",
+            "22" => "7",
+            "23" => "8",
+            "24" => "9",
+            "25" => ":",
+            "26" => ";",
+            "27" => "<",
+            "28" => "=",
+            "29" => ">",
+            "30" => "?",
+            "31" => "@",
+            "32" => "A",
+            "33" => "B",
+            "34" => "C",
+            "35" => "D",
+            "36" => "E",
+            "37" => "F",
+            "38" => "G",
+            "39" => "H",
+            "40" => "I");
+
 # id é usado para capturar o id do gene
 $id = "";
 
@@ -66,11 +109,7 @@ foreach $gene (keys(%qual)){
     # Transforma o string de qualidades para array com o objetivo de fazer a conversão Phred+33 (S - Sanger)
     @quality_array = split(/\s+/, $quality);
     for ($i = 0; $i < @quality_array; $i++){
-        if($quality_array[$i] <= 40){
-            $quality_array[$i] = "S";
-        } else{
-            $quality_array[$i] = ".";
-        }
+        $quality_array[$i] = $phred33{$quality_array[$i]};
     }
 
     # Juntamos o array em string para escrever a ultima linha
