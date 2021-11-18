@@ -18,10 +18,13 @@ while (<SEQ>) {
     # Se a linha começar com um ">" então é linha de ID
     # Caso contrario, geramos o complemento reverso
     if($_ =~ /^>/){
-        print OUT "$_\n";
+        $offset = index($_, "name=");
+        $str = substr($_, $offset);
+        ($nome = $str) =~ s/;(.*)//;
+        print OUT "$nome\n";
     } else{
         $rev_dna = reverse($_);
-        $rev_dna =~ tr/atcgATCG/tagcTAGC/;
+        $rev_dna =~ tr/ATGCatgc/TACGtacg/;
         print OUT "$rev_dna\n";
     }
 }
