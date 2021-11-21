@@ -29,12 +29,14 @@ my ($hashSEQ, $hashQUAL) = fasta2hash($input1, $input2);
 # Obter o hash contendo o nome e a posição da enzima
 my $hashPOSITION = searchEnzyme($hashSEQ, $enzima);
 
-for (sort keys %{ $hashPOSITION }) {
-    print "$_ => ${ $hashPOSITION }{$_}\n";
-}
+# for (sort keys %{ $hashPOSITION }) {
+#     print "$_ => ${ $hashPOSITION }{$_}\n";
+# }
 
-open(my $OUT, ">$output") || die "Nao foi possivel abrir o arquivo $output\n";
-close OUT;
+# Converter para FASTQ
+my $concluido = fasta_to_fastaq($hashPOSITION, $hashSEQ, $hashQUAL, $output);
+
+print("$concluido\n");
 
 exit;
 
@@ -84,8 +86,8 @@ sub fasta2hash {
         }
     }
 
-    close SEQ;
-    close QUAL;
+    close $SEQ;
+    close $QUAL;
     
     # Referencias podem salvar um pouco de memoria
     return (\%seq, \%qual);
@@ -102,11 +104,95 @@ sub searchEnzyme {
     
     # Loop nas sequencias
     foreach my $seq_name (keys(%$seqs)){
-        if (index(%$seqs{$seq_name}, $enzima) != -1) {
-            $position{$seq_name} = index(%$seqs{$seq_name}, $enzima);
+        # Checar se a sequencia contem a enzima com upper case para evitar case sensitive
+        # Se conter, alimenta o hash com o nome e a posição onde começa a enzima
+        if (index(uc(%$seqs{$seq_name}), uc($enzima)) != -1) {
+            $position{$seq_name} = index(uc(%$seqs{$seq_name}), uc($enzima));
         }
     }
 
     # Referencias podem salvar um pouco de memoria
     return (\%position);
+}
+
+## subrotina para converter as sequências COM o sítio indicado e as respectivas qualidades no formato FASTA para formato FASTQ. Gerar um novo arquivo de saída, indicando a posição do sítio na DESCRIÇÃO da sequência.
+## argumento: hashes contendo a posição da enzima, sequencias e as qualidades e o nome do arquivo para output
+## retorna: output
+
+sub fasta_to_fastaq {
+    my ($position, $seqs, $qual, $output) = @_;
+
+    open(my $OUT, ">$output") || die "Nao foi possivel abrir o arquivo $output\n";
+    
+    my %phred33 = ("0" => "!",
+                    "1" => "\\",
+                    "2" => "#",
+                    "3" => "\$",
+                    "4" => "%",
+                    "5" => "&",
+                    "6" => "'",
+                    "7" => "(",
+                    "8" => ")",
+                    "9" => "*",
+                    "10" => "+",
+                    "11" => ",",
+                    "12" => "-",
+                    "13" => ".",
+                    "14" => "/",
+                    "15" => "0",
+                    "16" => "1",
+                    "17" => "2",
+                    "18" => "3",
+                    "19" => "4",
+                    "20" => "5",
+                    "21" => "6",
+                    "22" => "7",
+                    "23" => "8",
+                    "24" => "9",
+                    "25" => ":",
+                    "26" => ";",
+                    "27" => "<",
+                    "28" => "=",
+                    "29" => ">",
+                    "30" => "?",
+                    "31" => "@",
+                    "32" => "A",
+                    "33" => "B",
+                    "34" => "C",
+                    "35" => "D",
+                    "36" => "E",
+                    "37" => "F",
+                    "38" => "G",
+                    "39" => "H",
+                    "40" => "I");
+
+    # Agora vamos iterar nos hash de qualidades para printar no formato
+    # @GENE
+    # SEQ
+    # +
+    # Encoding em Phred+33 (S - Sanger)
+    my $next_row = $sth->fetch();
+    foreach my $gene (keys(%$position)){
+        print $OUT "$gene; Position: @$position{$gene}\n";
+        print $OUT "@$seqs{$gene}\n";
+        print $OUT "+\n";
+
+        # Remove eventuais espaços no inicio e no fim da string de qualidades
+        (my $quality = %$qual{$gene}) =~ s/^\s*(.*?)\s*$/$1/;
+
+        # Transforma o string de qualidades para array com o objetivo de fazer a conversão Phred+33 (S - Sanger)
+        my @quality_array = split(/\s+/, $quality);
+        for (my $i = 0; $i < @quality_array; $i++){
+            $quality_array[$i] = $phred33{$quality_array[$i]};
+        }
+
+        # Juntamos o array em string para escrever a ultima linha
+        $quality = join("", @quality_array);
+
+        print $OUT "$quality\n";
+    }
+
+    close $OUT;
+
+    return ("Conversao de FASTA para FASTQ concluida");
 }
