@@ -1,20 +1,20 @@
 #! /usr/bin/perl
 
-## --------------------------------------------------------------------- ##
-##                                                                       ##
-##  SCRIPT: DaniloPerlE08.pl                                19.11.2021   ##
-##                                                                       ##
-##  DESCRIPTION: script para converter arquivo no formato FASTA para     ##
-##               FASTAQ com sitios                                       ##
-##                                                                       ##
-##  USAGE: perl DaniloPerlE08.pl                                         ##
-##              arquivoSequencias.fasta arquivoQualidades.fasta          ##
-##              arquivoSequenciasComSitio.fastq                          ##
-##              enzima de restrição                                      ##
-##                                                                       ##
-##  AUTHOR: Danilo de Paula Perl                                         ##
-##                                                                       ##
-## --------------------------------------------------------------------- ##
+## ---------------------------------------------------------------------------- ##
+##                                                                              ##
+##  SCRIPT: DaniloPerlE08.pl                                19.11.2021          ##
+##                                                                              ##
+##  DESCRIPTION: script para converter arquivo no formato FASTA para            ##
+##               FASTAQ com sitios                                              ##
+##                                                                              ##
+##  USAGE: perl DaniloPerlE08.pl                                                ##
+##              arquivoSequencias.fasta arquivoQualidades.fasta                 ##
+##              arquivoSequenciasComSitio.fastq                                 ##
+##              enzima de restrição                                             ##
+## ./DaniloPerlE08.pl Chom-tr.fasta Chom-tr.fasta.qual E08OUTPUT.fastaq GCTT    ##
+##  AUTHOR: Danilo de Paula Perl                                                ##
+##                                                                              ##
+## ---------------------------------------------------------------------------- ##
 
 use strict;
 
