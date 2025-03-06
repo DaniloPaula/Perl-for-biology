@@ -1,0 +1,10 @@
+PERSONAGEM	ESPECIE	PLANETA	PRIMEIRA APARICAO
+Ahsoka Tano	Togruta	Shili 	Star Wars: The Clone Wars (2008)
+Luke Skywalker	Humana	Polis Massa  	Star Wars: a New Hope (1977) 
+Leia Organa	Humana	Polis Massa 	Star Wars: a New Hope (1977)
+Obi-Wan Kenobi	Humana	Stewjon 	Star Wars: a New Hope (1977)
+Hera Syndulla	Twi'lek	Ryloth 	Star Wars: Rebels (2014)
+Anakin Skywalker	Humana	Tattooine 	Star Wars: The Phantom Menace (1999)
+Padmé Amidala	Humana	Naboo 	Star Wars: The Phantom Menace (1999)
+Rey	Humana	Jakku 	Star Wars: the Force Awakens (2015)
+Sabine Wren	Human	Mandalore 	Star Wars: Rebels (2014)

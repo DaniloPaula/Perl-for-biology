@@ -1,0 +1,2 @@
+Onde estou escrevendo sem filehandle?
+Onde estou escrevendo com STDOUT?
